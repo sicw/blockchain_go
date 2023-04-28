@@ -22,15 +22,15 @@ wallet_3000: 1KY1ZHxTe4NiXFW3MoCirVHrbxpJNwckF5
 
 export NODE_ID=3001
 go run . createwallet
-wallet_3000: 1CgemWVkwShYZ2ABocMmpX8unoAEasv4Ux
+wallet_3001: 1CgemWVkwShYZ2ABocMmpX8unoAEasv4Ux
 
 export NODE_ID=3002
 go run . createwallet
-wallet_3000: 12p47oV9vzSg3zKKg4uSLsRtEfSnSnwKar
+wallet_3002: 12p47oV9vzSg3zKKg4uSLsRtEfSnSnwKar
 
 创建区块链
-回到3000端口, 执行 go run . createblockchain -address 1KY1ZHxTe4NiXFW3MoCirVHrbxpJNwckF5
-复制blockchain_3000.db 为blockchain_3001.db、blockchain_3002.db(所有节点只是拥有相同区块的副本)
+回到3002端口, 执行 go run . createblockchain -address 12p47oV9vzSg3zKKg4uSLsRtEfSnSnwKar (3000端口为公共节点 发布地址的)
+复制blockchain_3002.db 为blockchain_3000.db、blockchain_3001.db(所有节点只是拥有相同区块的副本)
 
 启动节点
 3000: go run . startnode
