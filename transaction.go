@@ -73,8 +73,6 @@ func (tx *Transaction) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transac
 		txCopy.Vin[inID].Signature = nil
 		txCopy.Vin[inID].PubKey = prevTx.Vout[vin.Vout].PubKeyHash
 
-		// todo 这里修改vin.Txid和vin.Vout
-
 		dataToSign := fmt.Sprintf("%x\n", txCopy)
 
 		r, s, err := ecdsa.Sign(rand.Reader, &privKey, []byte(dataToSign))
@@ -164,8 +162,6 @@ func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
 
 		dataToVerify := fmt.Sprintf("%x\n", txCopy)
 
-		// todo 如何验证vin中的PubKey与Txid和Vout能对应上
-		// todo 在构造交易时 PubKey与自己的私钥能匹配, 但是Txid和Vout不匹配 是不是可以作弊.
 		rawPubKey := ecdsa.PublicKey{Curve: curve, X: &x, Y: &y}
 		if ecdsa.Verify(&rawPubKey, []byte(dataToVerify), &r, &s) == false {
 			return false
