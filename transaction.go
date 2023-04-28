@@ -162,6 +162,10 @@ func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
 
 		dataToVerify := fmt.Sprintf("%x\n", txCopy)
 
+		// 验证通过说明
+		// 1. vin.PubKey与签名的私钥是一对
+		// 2. 数据中的Txid、Vout、PubKeyHash能匹配
+		// 3. 怎么证明vin.PubKey与PubKeyHash是匹配的呢 prevTx.Vout[vin.Vout].PubKeyHash === hash(vin.PubKey)
 		rawPubKey := ecdsa.PublicKey{Curve: curve, X: &x, Y: &y}
 		if ecdsa.Verify(&rawPubKey, []byte(dataToVerify), &r, &s) == false {
 			return false
@@ -210,9 +214,9 @@ func NewUTXOTransaction(wallet *Wallet, to string, amount int, UTXOSet *UTXOSet)
 		if err != nil {
 			log.Panic(err)
 		}
-
+		print(txID)
 		for _, out := range outs {
-			input := TXInput{txID, out, nil, wallet.PublicKey}
+			input := TXInput{[]byte{0x86,0x13,0x12,0xbd,0x7c,0xe5,0xc,0xfc,0xf5,0x45,0x9b,0xf8,0x25,0x4e,0x8b,0x71,0x89,0x28,0x43,0x54,0x4d,0x0,0x97,0x7a,0x1c,0x97,0xc6,0xa1,0x53,0xca,0xa8,0x3b}, out, nil, wallet.PublicKey}
 			inputs = append(inputs, input)
 		}
 	}

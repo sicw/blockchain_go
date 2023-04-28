@@ -43,9 +43,22 @@ func TestECDSA(t *testing.T) {
 	fmt.Printf("Signature is valid: %t\n", isValid)
 }
 
+func TestHashPubKey(t *testing.T) {
+	// 看下写死的tx中 out是不是from的
+
+	from := "12p47oV9vzSg3zKKg4uSLsRtEfSnSnwKar"
+	wallets, _ := NewWallets("3002")
+	wallet := wallets.GetWallet(from)
+	pubHashkey := HashPubKey(wallet.PublicKey)
+	// [19 222 71 52 233 144 224 99 72 206 109 185 109 219 199 250 177 149 244 152]
+	// 整好与Height:4 coinbase vout匹配, 需要换个数据比较
+	fmt.Printf("%d,",pubHashkey)
+}
 
 func TestSendCoin(t *testing.T) {
+	// wallet3
 	from := "12p47oV9vzSg3zKKg4uSLsRtEfSnSnwKar"
+	// wallet2
 	to := "1CgemWVkwShYZ2ABocMmpX8unoAEasv4Ux"
 	nodeID := "3002"
 	mineNow := true
@@ -103,8 +116,13 @@ func TestGetBalance(t *testing.T) {
 	fmt.Printf("Balance of '%s': %d\n", address, balance)
 }
 
+func TestBytes(t *testing.T) {
+	txid := []byte("�\u0013\u0012�|�\f��E��%N�q�(CTM\u0000�z\u001C�ơSʨ;")
+	println(txid)
+}
+
 func TestPrintChain(t *testing.T) {
-	bc := NewBlockchain("3000")
+	bc := NewBlockchain("3002")
 	defer bc.db.Close()
 
 	bci := bc.Iterator()
@@ -118,6 +136,9 @@ func TestPrintChain(t *testing.T) {
 		pow := NewProofOfWork(block)
 		fmt.Printf("PoW: %s\n\n", strconv.FormatBool(pow.Validate()))
 		for _, tx := range block.Transactions {
+			for i := range tx.ID {
+				fmt.Printf("0x%x%s",tx.ID[i],",")
+			}
 			fmt.Println(tx)
 		}
 		fmt.Printf("\n\n")

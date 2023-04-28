@@ -135,7 +135,6 @@ func (bc *Blockchain) AddBlock(block *Block) {
 // FindTransaction finds a transaction by its ID
 func (bc *Blockchain) FindTransaction(ID []byte) (Transaction, error) {
 	bci := bc.Iterator()
-
 	for {
 		block := bci.Next()
 
